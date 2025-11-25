@@ -4,7 +4,7 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches:
-      - main # Or your default branch
+      - github-pages
 
 permissions:
   contents: read
@@ -29,8 +29,14 @@ jobs:
       - name: Build project
         run: |
           mkdir -p dist
-          # More robust esbuild command
-          esbuild index.tsx --bundle --platform=browser --outfile=dist/index.js --format=esm --jsx=automatic --resolve-extensions=.tsx,.ts,.js
+          # More robust esbuild command with external dependencies defined
+          esbuild index.tsx --bundle --platform=browser --outfile=dist/index.js --format=esm --jsx=automatic --resolve-extensions=.tsx,.ts,.js \
+            --external:react \
+            --external:react-dom/* \
+            --external:react/* \
+            --external:@google/genai \
+            --external:react-markdown \
+            --external:remark-gfm
           # Copy static assets to the dist folder
           cp index.html dist/index.html
           cp index.css dist/index.css
