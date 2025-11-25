@@ -29,10 +29,11 @@ jobs:
       - name: Build project
         run: |
           mkdir -p dist
-          # Compile all ts/tsx files into a single bundle, and output to dist/index.js
-          esbuild index.tsx --bundle --outfile=dist/index.js --format=esm --jsx=automatic
-          # Copy the main html file to the dist folder
+          # More robust esbuild command
+          esbuild index.tsx --bundle --platform=browser --outfile=dist/index.js --format=esm --jsx=automatic --resolve-extensions=.tsx,.ts,.js
+          # Copy static assets to the dist folder
           cp index.html dist/index.html
+          cp index.css dist/index.css
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
